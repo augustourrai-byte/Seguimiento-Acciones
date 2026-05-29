@@ -2,284 +2,154 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Seguimiento Planes de Acción</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento Acciones Operacionales</title>
 <style>
-
-body{
-    font-family: Segoe UI, Arial, sans-serif;
-    background:#f5f7fa;
-    padding:30px;
-}
-
-.container{
-    max-width:1200px;
-    margin:auto;
-}
-
-h1{
-    color:#1f2937;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
-
-th{
-    background:#1f2937;
-    color:white;
-    padding:14px;
-    text-align:left;
-}
-
-td{
-    padding:14px;
-    border-bottom:1px solid #e5e7eb;
-}
-
-.status-red{
-    color:#dc2626;
-    font-weight:bold;
-}
-
-.status-yellow{
-    color:#d97706;
-    font-weight:bold;
-}
-
-.status-green{
-    color:#16a34a;
-    font-weight:bold;
-}
-
-.btn-expand{
-    border:none;
-    background:#2563eb;
-    color:white;
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:18px;
-}
-
-.detail-row{
-    display:none;
-    background:#f9fafb;
-}
-
-.detail-box{
-    padding:20px;
-}
-
-.section-title{
-    font-weight:bold;
-    margin-bottom:10px;
-    color:#111827;
-}
-
-.checklist{
-    margin-left:20px;
-}
-
-.review-box{
-    margin-top:20px;
-    background:white;
-    border-left:4px solid #2563eb;
-    padding:15px;
-    border-radius:8px;
-}
-
-.action-buttons{
-    margin-top:15px;
-}
-
-.action-buttons button{
-    padding:10px 18px;
-    margin-right:10px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.accept{
-    background:#16a34a;
-    color:white;
-}
-
-.reject{
-    background:#dc2626;
-    color:white;
-}
-
-.reschedule{
-    background:#f59e0b;
-    color:white;
-}
-
+body{font-family:Segoe UI,Arial,sans-serif;background:#f3f4f6;margin:0;padding:20px}
+h1{margin:0 0 15px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.08);text-align:center}
+.kpi .n{font-size:28px;font-weight:bold}
+.card,.form{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.08);margin-bottom:12px}
+input,select,textarea{width:100%;padding:8px;margin:4px 0 10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box}
+button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer}
+.primary{background:#2563eb;color:#fff}
+.danger{background:#dc2626;color:#fff}
+.detail{display:none;margin-top:10px;border-top:1px solid #eee;padding-top:10px}
+.row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.badge{padding:4px 8px;border-radius:20px;color:#fff;font-size:12px}
+.pendiente{background:#dc2626}
+.gestion{background:#f59e0b}
+.cerrado{background:#16a34a}
+.top{display:flex;justify-content:space-between;align-items:center}
 </style>
 </head>
-
 <body>
+<h1>📋 Seguimiento Acciones Operacionales</h1>
 
-<div class="container">
-
-<h1>📋 Seguimiento Planes de Acción Operacional</h1>
-
-<table>
-
-<thead>
-<tr>
-    <th></th>
-    <th>Acción</th>
-    <th>Responsable</th>
-    <th>Estado</th>
-    <th>Avance</th>
-    <th>Compromiso</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-    <td>
-        <button class="btn-expand" onclick="toggleDetail('d1')">+</button>
-    </td>
-    <td>Revisión propuesta dotación Facility</td>
-    <td>Héctor Muñoz</td>
-    <td class="status-red">🔴 Pendiente</td>
-    <td>60%</td>
-    <td>29-05-2026</td>
-</tr>
-
-<tr id="d1" class="detail-row">
-<td colspan="6">
-
-<div class="detail-box">
-
-<div class="section-title">
-Pendientes de revisión
+<div class="kpis">
+<div class="kpi"><div>Total</div><div class="n" id="kTotal">0</div></div>
+<div class="kpi"><div>Pendientes</div><div class="n" id="kPend">0</div></div>
+<div class="kpi"><div>En Gestión</div><div class="n" id="kGest">0</div></div>
+<div class="kpi"><div>Cerradas</div><div class="n" id="kCerr">0</div></div>
+<div class="kpi"><div>Por Vencer</div><div class="n" id="kVenc">0</div></div>
 </div>
 
-<ul class="checklist">
-<li>Validar estructura organizacional.</li>
-<li>Confirmar requerimientos operación.</li>
-<li>Validar impacto económico.</li>
-<li>Aprobación Gerencia Contrato.</li>
-</ul>
-
-<div class="review-box">
-
-<b>📅 Propuesta de revisión</b><br><br>
-
-Viernes 29 de Mayo de 2026<br>
-11:00 hrs
-
-<div class="action-buttons">
-
-<button class="accept">
-✓ Aceptar
-</button>
-
-<button class="reschedule">
-⏰ Reagendar
-</button>
-
-<button class="reject">
-✕ Rechazar
-</button>
-
+<div class="form">
+<h3>Nueva Acción</h3>
+<div class="row">
+<input id="titulo" placeholder="Título">
+<input id="responsable" placeholder="Responsable">
+<input id="cliente" placeholder="Cliente">
+<input id="area" placeholder="Área">
+<input id="fechaComp" type="date">
+<select id="estado">
+<option>Pendiente</option>
+<option>En Gestión</option>
+<option>Cerrado</option>
+</select>
+<input id="avance" type="number" placeholder="% Avance">
+<input id="fechaRev" type="date">
+<input id="horaRev" type="time">
+</div>
+<textarea id="descripcion" placeholder="Descripción"></textarea>
+<textarea id="pendientes" placeholder="Pendientes"></textarea>
+<button class="primary" onclick="guardar()">Guardar Acción</button>
 </div>
 
-</div>
-
-</div>
-
-</td>
-</tr>
-
-<tr>
-    <td>
-        <button class="btn-expand" onclick="toggleDetail('d2')">+</button>
-    </td>
-    <td>Control Transporte Operacional</td>
-    <td>Cristian Araya</td>
-    <td class="status-yellow">🟡 En Gestión</td>
-    <td>70%</td>
-    <td>30-05-2026</td>
-</tr>
-
-<tr id="d2" class="detail-row">
-<td colspan="6">
-
-<div class="detail-box">
-
-<div class="section-title">
-Pendientes de revisión
-</div>
-
-<ul class="checklist">
-<li>Validar rutas.</li>
-<li>Confirmar horarios.</li>
-<li>Aprobar planificación.</li>
-</ul>
-
-<div class="review-box">
-
-<b>📅 Propuesta de revisión</b><br><br>
-
-Viernes 30 de Mayo de 2026<br>
-09:30 hrs
-
-<div class="action-buttons">
-
-<button class="accept">
-✓ Aceptar
-</button>
-
-<button class="reschedule">
-⏰ Reagendar
-</button>
-
-<button class="reject">
-✕ Rechazar
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+<div id="lista"></div>
 
 <script>
+let acciones=JSON.parse(localStorage.getItem('acciones')||'[]');
 
-function toggleDetail(id){
-
-const row = document.getElementById(id);
-
-if(row.style.display === "table-row"){
-    row.style.display = "none";
-}else{
-    row.style.display = "table-row";
+function guardar(){
+ const a={
+ id:Date.now(),
+ titulo:titulo.value,responsable:responsable.value,cliente:cliente.value,
+ area:area.value,fechaComp:fechaComp.value,estado:estado.value,
+ avance:avance.value||0,fechaRev:fechaRev.value,horaRev:horaRev.value,
+ descripcion:descripcion.value,pendientes:pendientes.value
+ };
+ acciones.push(a);
+ persistir();
+ document.querySelectorAll('input,textarea').forEach(x=>{if(x.type!='date'&&x.type!='time')x.value='';});
 }
 
+function persistir(){
+ localStorage.setItem('acciones',JSON.stringify(acciones));
+ render();
 }
 
+function eliminar(id){
+ acciones=acciones.filter(x=>x.id!==id);
+ persistir();
+}
+
+function toggle(id){
+ const d=document.getElementById('d'+id);
+ d.style.display=d.style.display==='block'?'none':'block';
+}
+
+function render(){
+ const hoy=new Date();
+ let html='';
+ let p=0,g=0,c=0,v=0;
+
+ acciones.forEach(a=>{
+   if(a.estado==='Pendiente')p++;
+   if(a.estado==='En Gestión')g++;
+   if(a.estado==='Cerrado')c++;
+
+   if(a.fechaComp){
+      const f=new Date(a.fechaComp);
+      const dif=(f-hoy)/(1000*60*60*24);
+      if(dif>=0 && dif<=7 && a.estado!=='Cerrado')v++;
+   }
+
+   const cls=a.estado==='Pendiente'?'pendiente':a.estado==='En Gestión'?'gestion':'cerrado';
+
+   html+=`
+   <div class="card">
+    <div class="top">
+      <div>
+      <b>${a.titulo}</b><br>
+      ${a.cliente} | ${a.area}<br>
+      ${a.responsable}
+      </div>
+      <div>
+      <span class="badge ${cls}">${a.estado}</span>
+      </div>
+    </div>
+
+    <p>Avance: ${a.avance}% | Compromiso: ${a.fechaComp||'-'}</p>
+
+    <button class="primary" onclick="toggle(${a.id})">➕ Ver detalle</button>
+    <button class="danger" onclick="eliminar(${a.id})">Eliminar</button>
+
+    <div class="detail" id="d${a.id}">
+      <h4>Descripción</h4>
+      <p>${a.descripcion||''}</p>
+
+      <h4>Pendientes</h4>
+      <p>${a.pendientes||''}</p>
+
+      <h4>Propuesta de Revisión</h4>
+      <p>📅 ${a.fechaRev||'-'} ⏰ ${a.horaRev||'-'}</p>
+
+      <button>✓ Aceptar</button>
+      <button>⏰ Reagendar</button>
+    </div>
+   </div>`;
+ });
+
+ lista.innerHTML=html;
+ kTotal.innerText=acciones.length;
+ kPend.innerText=p;
+ kGest.innerText=g;
+ kCerr.innerText=c;
+ kVenc.innerText=v;
+}
+render();
 </script>
-
 </body>
 </html>

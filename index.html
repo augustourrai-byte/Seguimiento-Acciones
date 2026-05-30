@@ -3,151 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seguimiento Acciones Operacionales</title>
+<title>GCO - Gestión de Compromisos Operacionales</title>
 <style>
-body{font-family:Segoe UI,Arial,sans-serif;background:#f3f4f6;margin:0;padding:20px}
-h1{margin:0 0 15px}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
-.kpi{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.08);text-align:center}
-.kpi .n{font-size:28px;font-weight:bold}
-.card,.form{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.08);margin-bottom:12px}
-input,select,textarea{width:100%;padding:8px;margin:4px 0 10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box}
-button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer}
-.primary{background:#2563eb;color:#fff}
-.danger{background:#dc2626;color:#fff}
-.detail{display:none;margin-top:10px;border-top:1px solid #eee;padding-top:10px}
-.row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.badge{padding:4px 8px;border-radius:20px;color:#fff;font-size:12px}
-.pendiente{background:#dc2626}
-.gestion{background:#f59e0b}
-.cerrado{background:#16a34a}
-.top{display:flex;justify-content:space-between;align-items:center}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
+.sidebar{position:fixed;left:0;top:0;width:240px;height:100%;background:#1f2937;color:#fff;padding:20px;box-sizing:border-box}
+.sidebar h2{margin-top:0}
+.sidebar a{display:block;color:#fff;text-decoration:none;padding:10px;border-radius:6px;margin:5px 0}
+.sidebar a:hover{background:#374151}
+.main{margin-left:260px;padding:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.panel{background:#fff;padding:20px;border-radius:12px;margin-top:20px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+input,textarea,select{width:100%;padding:8px;margin-top:5px;margin-bottom:10px}
+button{background:#2563eb;color:#fff;border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
+.timeline-item{border-left:3px solid #2563eb;padding-left:10px;margin:10px 0}
+.checklist li{margin:6px 0}
 </style>
 </head>
 <body>
-<h1>📋 Seguimiento Acciones Operacionales</h1>
-
-<div class="kpis">
-<div class="kpi"><div>Total</div><div class="n" id="kTotal">0</div></div>
-<div class="kpi"><div>Pendientes</div><div class="n" id="kPend">0</div></div>
-<div class="kpi"><div>En Gestión</div><div class="n" id="kGest">0</div></div>
-<div class="kpi"><div>Cerradas</div><div class="n" id="kCerr">0</div></div>
-<div class="kpi"><div>Por Vencer</div><div class="n" id="kVenc">0</div></div>
+<div class="sidebar">
+<h2>GCO</h2>
+<a href="#dashboard">Dashboard</a>
+<a href="#planes">Planes de Acción</a>
+<a href="#agenda">Agenda</a>
+<a href="#timeline">Timeline</a>
+<a href="#correos">Correos</a>
 </div>
 
-<div class="form">
-<h3>Nueva Acción</h3>
-<div class="row">
+<div class="main">
+<h1>Gestión de Compromisos Operacionales</h1>
+
+<div id="dashboard" class="cards">
+<div class="card"><h3>Planes</h3><div id="kpiPlanes">0</div></div>
+<div class="card"><h3>Pendientes</h3><div id="kpiPend">0</div></div>
+<div class="card"><h3>Completados</h3><div id="kpiComp">0</div></div>
+</div>
+
+<div id="planes" class="panel">
+<h2>Plan de Acción</h2>
 <input id="titulo" placeholder="Título">
-<input id="responsable" placeholder="Responsable">
-<input id="cliente" placeholder="Cliente">
-<input id="area" placeholder="Área">
-<input id="fechaComp" type="date">
-<select id="estado">
-<option>Pendiente</option>
-<option>En Gestión</option>
-<option>Cerrado</option>
-</select>
-<input id="avance" type="number" placeholder="% Avance">
-<input id="fechaRev" type="date">
-<input id="horaRev" type="time">
-</div>
-<textarea id="descripcion" placeholder="Descripción"></textarea>
-<textarea id="pendientes" placeholder="Pendientes"></textarea>
-<button class="primary" onclick="guardar()">Guardar Acción</button>
+<textarea id="detalle" placeholder="Detalle"></textarea>
+<button onclick="guardarPlan()">Guardar</button>
+<div id="listaPlanes"></div>
 </div>
 
-<div id="lista"></div>
+<div class="panel">
+<h2>Panel tipo Monday</h2>
+<ul class="checklist">
+<li><input type="checkbox"> Reunión realizada</li>
+<li><input type="checkbox"> Cliente informado</li>
+<li><input type="checkbox"> Evidencia cargada</li>
+<li><input type="checkbox"> Cierre validado</li>
+</ul>
+</div>
+
+<div id="agenda" class="panel">
+<h2>Agenda</h2>
+<input type="date">
+<input type="time">
+<textarea placeholder="Compromiso"></textarea>
+</div>
+
+<div id="timeline" class="panel">
+<h2>Timeline</h2>
+<div class="timeline-item">Creación del compromiso</div>
+<div class="timeline-item">Seguimiento operacional</div>
+<div class="timeline-item">Cierre</div>
+</div>
+
+<div id="correos" class="panel">
+<h2>Generador de Correos</h2>
+<textarea id="correo" rows="6">Estimados,
+
+Junto con saludar, comparto actualización del compromiso operacional.
+
+Estado:
+- Avance:
+- Pendientes:
+- Próximos pasos:
+
+Saludos.</textarea>
+<button onclick="copiarCorreo()">Copiar correo</button>
+</div>
+</div>
 
 <script>
-let acciones=JSON.parse(localStorage.getItem('acciones')||'[]');
-
-function guardar(){
- const a={
- id:Date.now(),
- titulo:titulo.value,responsable:responsable.value,cliente:cliente.value,
- area:area.value,fechaComp:fechaComp.value,estado:estado.value,
- avance:avance.value||0,fechaRev:fechaRev.value,horaRev:horaRev.value,
- descripcion:descripcion.value,pendientes:pendientes.value
- };
- acciones.push(a);
- persistir();
- document.querySelectorAll('input,textarea').forEach(x=>{if(x.type!='date'&&x.type!='time')x.value='';});
+function obtenerPlanes(){
+ return JSON.parse(localStorage.getItem("gco_planes")||"[]");
 }
-
-function persistir(){
- localStorage.setItem('acciones',JSON.stringify(acciones));
+function guardarPlan(){
+ const planes=obtenerPlanes();
+ planes.push({
+   titulo:document.getElementById("titulo").value,
+   detalle:document.getElementById("detalle").value,
+   estado:"Pendiente"
+ });
+ localStorage.setItem("gco_planes",JSON.stringify(planes));
  render();
 }
-
-function eliminar(id){
- acciones=acciones.filter(x=>x.id!==id);
- persistir();
-}
-
-function toggle(id){
- const d=document.getElementById('d'+id);
- d.style.display=d.style.display==='block'?'none':'block';
-}
-
 function render(){
- const hoy=new Date();
- let html='';
- let p=0,g=0,c=0,v=0;
-
- acciones.forEach(a=>{
-   if(a.estado==='Pendiente')p++;
-   if(a.estado==='En Gestión')g++;
-   if(a.estado==='Cerrado')c++;
-
-   if(a.fechaComp){
-      const f=new Date(a.fechaComp);
-      const dif=(f-hoy)/(1000*60*60*24);
-      if(dif>=0 && dif<=7 && a.estado!=='Cerrado')v++;
-   }
-
-   const cls=a.estado==='Pendiente'?'pendiente':a.estado==='En Gestión'?'gestion':'cerrado';
-
-   html+=`
-   <div class="card">
-    <div class="top">
-      <div>
-      <b>${a.titulo}</b><br>
-      ${a.cliente} | ${a.area}<br>
-      ${a.responsable}
-      </div>
-      <div>
-      <span class="badge ${cls}">${a.estado}</span>
-      </div>
-    </div>
-
-    <p>Avance: ${a.avance}% | Compromiso: ${a.fechaComp||'-'}</p>
-
-    <button class="primary" onclick="toggle(${a.id})">➕ Ver detalle</button>
-    <button class="danger" onclick="eliminar(${a.id})">Eliminar</button>
-
-    <div class="detail" id="d${a.id}">
-      <h4>Descripción</h4>
-      <p>${a.descripcion||''}</p>
-
-      <h4>Pendientes</h4>
-      <p>${a.pendientes||''}</p>
-
-      <h4>Propuesta de Revisión</h4>
-      <p>📅 ${a.fechaRev||'-'} ⏰ ${a.horaRev||'-'}</p>
-
-      <button>✓ Aceptar</button>
-      <button>⏰ Reagendar</button>
-    </div>
-   </div>`;
- });
-
- lista.innerHTML=html;
- kTotal.innerText=acciones.length;
- kPend.innerText=p;
- kGest.innerText=g;
- kCerr.innerText=c;
- kVenc.innerText=v;
+ const planes=obtenerPlanes();
+ document.getElementById("kpiPlanes").innerText=planes.length;
+ document.getElementById("kpiPend").innerText=planes.filter(x=>x.estado==="Pendiente").length;
+ document.getElementById("kpiComp").innerText=planes.filter(x=>x.estado==="Completado").length;
+ document.getElementById("listaPlanes").innerHTML=planes.map(p=>
+ `<div class='card'><b>${p.titulo}</b><br>${p.detalle}<br><small>${p.estado}</small></div>`
+ ).join("");
+}
+function copiarCorreo(){
+ navigator.clipboard.writeText(document.getElementById("correo").value);
+ alert("Correo copiado");
 }
 render();
 </script>
